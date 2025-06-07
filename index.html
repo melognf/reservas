@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <title>Reserva de Turno - Manicuría</title>
+  <link rel="stylesheet" href="estilos.css" />
+</head>
+<body>
+
+  <div class="logo-container">
+    <img src="imagenes/nc nails.jpg" alt="Logo de la empresa" />
+  </div>
+
+  <div class="botones-superiores">
+    <button class="btn-superior activo" id="btnReservas">Reservas</button>
+    <button class="btn-superior" id="btnPrecios">Info, Precios y Ubicación</button>
+  </div>
+
+  <div class="container" id="vistaReservas">
+    <h2>Reserva tu turno</h2>
+    <form id="formTurno">
+      <label for="nombre">Nombre completo:</label>
+      <input type="text" id="nombre" required />
+
+      <label for="telefono">Teléfono / WhatsApp:</label>
+      <input type="tel" id="telefono" required />
+
+      <label for="servicio">Seleccioná el servicio:</label>
+      <select id="servicio" required>
+        <option value="">-- Elegí una opción --</option>
+        <option value="Manicuría tradicional - $2600">Manicuría tradicional - $2600</option>
+        <option value="Manicuría + esmaltado tradicional - $5200">Manicuría + esmaltado tradicional - $5200</option>
+        <option value="Manicuría + esmaltado semipermanente - $9500">Manicuría + esmaltado semipermanente - $9500</option>
+        <option value="Capping con base rubber + esmaltado semipermanente hasta largo 2 - $11500">Capping con base rubber + esmaltado semipermanente hasta largo 2 - $11500</option>
+        <option value="Capping en acrygel/gel + esmaltado semipermanente hasta largo 2 - $12500">Capping en acrygel/gel + esmaltado semipermanente hasta largo 2 - $12500</option>
+        <option value="Extensiones en Soft Gel hasta largo 3 - $14000">Extensiones en Soft Gel hasta largo 3 - $14000</option>
+        <option value="Esculpidas hasta largo 2 - $14000">Esculpidas hasta largo 2 - $14000</option>
+        <option value="Retiro de esmaltado semipermanente de otro salón - $3000">Retiro de esmaltado semipermanente de otro salón - $3000</option>
+        <option value="Retiro de capping de otro salón - $4000">Retiro de capping de otro salón - $4000</option>
+        <option value="Retiro de esculpidas/Soft gel de otro salón - $4500">Retiro de esculpidas/Soft gel de otro salón - $4500</option>
+      </select>
+
+      <label for="fecha">Seleccioná la fecha:</label>
+      <input type="date" id="fecha" required />
+
+      <div class="horarios" id="horarios"></div>
+
+      <button type="button" id="aplicarHorario" style="display:none;">Aplicar</button>
+      <button type="button" id="editarTurnoBtn" style="display:none;">Editar</button>
+
+      <p id="detalleSeleccion" style="margin-top: 10px; font-weight: bold; color: #000;"></p>
+
+      <label class="gris" for="mensaje">Mensaje adicional (opcional):</label>
+      <textarea id="mensaje" rows="2"></textarea>
+
+      <button type="submit">Enviar solicitud por WhatsApp</button>
+    </form>
+
+    <div id="confirmacion" class="success-message hidden">
+      <span class="checkmark">✔</span>
+      <div>
+        <strong>¡Turno agendado!</strong><br />
+        Me comunicaré con vos para confirmar tu reserva 💅
+      </div>
+      <button class="close-msg" onclick="cerrarConfirmacion()">×</button>
+    </div>
+  </div>
+
+  <div class="container" id="vistaPrecios" style="display: none;">
+    <h2>Info, Precios y Ubicación</h2>
+    <p><strong>Dirección:</strong> Berlín 1405, Loma Hermosa (portón negro)</p>
+    <p><strong>Horarios de atención:</strong> Lunes a Sábado de 08:30 a 18:00</p>
+
+    <h3>Precios</h3>
+    <ul>
+      <li>Manicuría tradicional - $2600</li>
+      <li>Manicuría + esmaltado tradicional - $5200</li>
+      <li>Manicuría + esmaltado semipermanente - $9500</li>
+      <li>Capping con base rubber + esmaltado semipermanente hasta largo 2 - $11500</li>
+      <li>Capping en acrygel/gel + esmaltado semipermanente hasta largo 2 - $12500</li>
+      <li>Extensiones en Soft Gel hasta largo 3 - $14000</li>
+      <li>Esculpidas hasta largo 2 - $14000</li>
+      <li>Retiro de esmaltado semipermanente de otro salón - $3000</li>
+      <li>Retiro de capping de otro salón - $4000</li>
+      <li>Retiro de esculpidas/Soft gel de otro salón - $4500</li>
+    </ul>
+
+    <h3>Ubicación en el mapa</h3>
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3285.4858767465594!2d-58.61140398925331!3d-34.56657047285484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcb92fd12cd157%3A0xb9bc557f3db0a0b3!2sNC%20nails!5e0!3m2!1ses!2sar!4v1747609405275!5m2!1ses!2sar"
+      width="100%" height="300" style="border:0; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" allowfullscreen=""
+      loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </div>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBBX9nCkzxNOiXpeAxRjK7hvVjNh8ByKqg",
+    authDomain: "reservadeturnos-5bf86.firebaseapp.com",
+    projectId: "reservadeturnos-5bf86",
+    storageBucket: "reservadeturnos-5bf86.appspot.com",
+    messagingSenderId: "1043411780984",
+    appId: "1:1043411780984:web:ceeca965f5e32aa32bf48d",
+    measurementId: "G-16GJZPF3BV"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  window.db = db; // Exportamos Firestore para usarlo desde app.js
+</script>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

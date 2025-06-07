@@ -1,0 +1,218 @@
+body {
+      font-family: 'Poppins', sans-serif;
+      background: #ffffff;
+      padding: 20px;
+      margin: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 2rem;
+      background: #ded5bd;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 1rem;
+      }
+      input,
+      select,
+      textarea,
+      button {
+        width: 100% !important;
+        box-sizing: border-box;
+      }
+      .horarios {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    h2 {
+      color: #6d685a;
+      text-align: center;
+    }
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+    input,
+    select,
+    textarea {
+      padding: 10px;
+      width: 100%;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1em;
+      transition: border 0.3s ease, box-shadow 0.3s ease;
+    }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #6d685a;
+      box-shadow: 0 0 5px #000;
+      outline: none;
+    }
+    .horarios {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+      display: none;
+    }
+    .horario-btn {
+      padding: 8px;
+      background: #eee;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 0.9em;
+      transition: all 0.3s ease;
+      user-select: none;
+    }
+    .horario-btn:hover {
+      background-color: #e6dce3;
+      transform: scale(1.05);
+    }
+    .horario-btn.selected {
+      background-color: #6d685a;
+      color: white;
+      font-weight: bold;
+      transform: scale(1.08);
+    }
+    #aplicarHorario,
+    #editarTurnoBtn {
+      margin-top: 10px;
+      background-color: #6d685a;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: none;
+      font-size: 0.9em;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    #aplicarHorario:hover,
+    #editarTurnoBtn:hover {
+      background-color: #6d685a;
+      transform: scale(1.05);
+    }
+    button[type="submit"] {
+      background-color: #6d685a;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 5px;
+      width: 100%;
+      font-weight: bold;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    button[type="submit"]:hover {
+      transform: scale(1.03);
+    }
+    .success-message {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #000;
+      color: #ffffff;
+      border: 1px solid #d0e9c6;
+      padding: 15px 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      font-size: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      position: relative;
+    }
+    .success-message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .success-message.hidden {
+      display: none;
+    }
+    .success-message .checkmark {
+      font-size: 1.8rem;
+      margin-right: 10px;
+      color: #605b4f;
+    }
+    .success-message .close-msg {
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      color: #6d685a;
+      cursor: pointer;
+      margin-left: 15px;
+    }
+    .logo-container {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .logo-container img {
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border-radius: 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .btn {
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: #ff69b4;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .vista-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+  }
+
+  .botones-superiores {
+  display: flex;
+  width: 100%;
+}
+
+.btn-superior {
+  flex: 1;
+  padding: 1.7rem;
+  font-size: 1rem;
+  background-color: #ffffff;
+  color: #6d685a;
+  border: 1px solid #6d685a;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+@media (max-width: 600px) {
+  .btn-superior {
+    flex: 1 1 48%;
+  }
+}
+
+.btn-superior.activo {
+  background-color: #6d685a;
+  color: #ffffff;
+  border: none;
+}
+
+.gris {
+  color: #6d685a;
+}
