@@ -41,10 +41,11 @@ async function bloquearHorario(fecha, hora) {
     const data = snap.data();
     if (!data.horarios.includes(hora)) {
       data.horarios.push(hora);
-      await updateDoc(ref, { horarios: data.horarios });
+      await updateDoc(ref, { horarios: data.horarios, turnos: data.turnos });
     }
   } else {
-    await setDoc(ref, { horarios: [hora] });
+    await setDoc(ref, { horarios: [hora], turnos: { [hora]: duracion } });
+
   }
 }
 
@@ -56,6 +57,18 @@ async function desbloquearHorario(fecha, hora) {
     await updateDoc(ref, { horarios });
   }
 }
+const duracionesServicios = {
+  "Manicuría tradicional - $2600": 60,
+  "Manicuría + esmaltado tradicional - $5200": 60,
+  "Manicuría + esmaltado semipermanente - $9500": 120,
+  "Capping con base rubber + esmaltado semipermanente hasta largo 2 - $11500": 120,
+  "Capping en acrygel/gel + esmaltado semipermanente hasta largo 2 - $12500": 120,
+  "Extensiones en Soft Gel hasta largo 3 - $14000": 120,
+  "Esculpidas hasta largo 2 - $14000": 120,
+  "Retiro de esmaltado semipermanente de otro salón - $3000": 30,
+  "Retiro de capping de otro salón - $4000": 30,
+  "Retiro de esculpidas/Soft gel de otro salón - $4500": 30
+};
 
 async function cargarHorarios() {
   horariosDiv.innerHTML = "";
@@ -93,7 +106,7 @@ async function cargarHorarios() {
 
     if (bloqueados.includes(horaStr)) {
       btn.textContent = "Ocupado";
-      btn.style.background = "red";
+      btn.style.background = "#474646";
       btn.style.color = "#fff";
       btn.style.display = "flex";
       btn.style.justifyContent = "center";
@@ -132,6 +145,23 @@ fechaInput.addEventListener("change", () => {
   cargarHorarios();
 });
 
+function calcularBloquesConsecutivos(horaInicial, duracionMin) {
+  const bloques = [];
+  const [h, m] = horaInicial.split(":").map(Number);
+  let totalMin = h * 60 + m;
+
+  const cantidadBloques = duracionMin / 15;
+
+  for (let i = 0; i < cantidadBloques; i++) {
+    const horas = Math.floor(totalMin / 60);
+    const minutos = totalMin % 60;
+    bloques.push(`${String(horas).padStart(2, "0")}:${String(minutos).padStart(2, "0")}`);
+    totalMin += 15;
+  }
+
+  return bloques;
+}
+
 aplicarBtn.addEventListener("click", async () => {
   if (!horarioSeleccionado) {
     alert("Selecciona un horario primero.");
@@ -139,12 +169,30 @@ aplicarBtn.addEventListener("click", async () => {
   }
 
   const fecha = fechaInput.value;
-  await bloquearHorario(fecha, horarioSeleccionado);
+  const servicio = servicioSelect.value;
+  const duracion = duracionesServicios[servicio] || 60;
+
+  const bloquesAConfirmar = calcularBloquesConsecutivos(horarioSeleccionado, duracion);
+
+  // Verificá que ninguno esté ya ocupado antes de confirmar
+  const bloqueados = await obtenerHorariosBloqueados(fecha);
+  const conflicto = bloquesAConfirmar.some(hora => bloqueados.includes(hora));
+
+  if (conflicto) {
+    alert("Uno o más bloques necesarios para este turno ya están ocupados. Elegí otro horario.");
+    return;
+  }
+
+  // Bloqueá todos los horarios necesarios
+  for (const hora of bloquesAConfirmar) {
+    await bloquearHorario(fecha, hora);
+  }
 
   horarioConfirmado = horarioSeleccionado;
-  detalleSeleccion.textContent = `Turno confirmado para el ${fecha} a las ${horarioConfirmado}`;
+  detalleSeleccion.textContent = `Turno confirmado para el ${fecha} a las ${horarioConfirmado} (${duracion} minutos)`;
   aplicarBtn.style.display = "none";
   editarTurnoBtn.style.display = "inline-block";
+
   document.querySelectorAll(".horario-btn").forEach(btn => btn.style.pointerEvents = "none");
 });
 
@@ -206,3 +254,17 @@ window.cerrarConfirmacion = function () {
   confirmacionDiv.classList.remove("show");
   confirmacionDiv.classList.add("hidden");
 };
+
+document.getElementById("btnReservas").addEventListener("click", () => {
+  document.getElementById("vistaReservas").style.display = "block";
+  document.getElementById("vistaPrecios").style.display = "none";
+  document.getElementById("btnReservas").classList.add("activo");
+  document.getElementById("btnPrecios").classList.remove("activo");
+});
+
+document.getElementById("btnPrecios").addEventListener("click", () => {
+  document.getElementById("vistaReservas").style.display = "none";
+  document.getElementById("vistaPrecios").style.display = "block";
+  document.getElementById("btnPrecios").classList.add("activo");
+  document.getElementById("btnReservas").classList.remove("activo");
+});
